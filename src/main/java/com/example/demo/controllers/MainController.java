@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
+
+
     @GetMapping("/")
     public String Register(Model model) {
         //model.addAttribute("title", "Sign In");
