@@ -1,0 +1,81 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+
+<div class="container">
+    <div class="card bg-light">
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <h4 class="card-title mt-3 text-center">Create Account</h4>
+            <p class="text-center">Get started with your free account</p>
+            <form th:action="@{/process_register}" method="post" th:object="${user}">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user-circle"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Username" type="text" th:errorClass="is-invalid"
+                           th:field="*{username}" required minlength="3" maxlength="20"/>
+                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Password" type="password" th:errorClass="is-invalid"
+                           th:field="*{password}" required minlength="4" maxlength="30"/>
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Confirm password" type="password" th:errorClass="is-invalid"
+                           th:field="*{rpassword}" required/>
+                    <div th:if="${#fields.hasErrors('rpassword')}" th:errors="*{rpassword}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <label></label>
+                    <input name="" class="form-control" placeholder="Firstname" type="text" th:errorClass="is-invalid"
+                            th:field="*{firstName}" required maxlength="50">
+                    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <label></label>
+                    <input name="" class="form-control" placeholder="Lastname" type="text" th:errorClass="is-invalid"
+                           th:field="*{lastName}" required maxlength="50">
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Email" type="email" th:errorClass="is-invalid"
+                           th:field="*{email}" required/>
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Phone number" type="text" th:errorClass="is-invalid"
+                           pattern="^\+?(38)?(\d{10,11})$" title="(+38)0123456789"
+                           th:field="*{phone}" required/>
+                    <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+                </div> <!-- form-group// -->
+                <p class="text-center">Have an account?<a href="/login"> Sign in</a> </p>
+            </form>
+        </article>
+    </div> <!-- card.// -->
+</div>
+<!--container end.//-->
+</html>

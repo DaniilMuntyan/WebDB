@@ -1,9 +1,9 @@
 package com.example.demo.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -12,25 +12,16 @@ import java.util.Set;
 @NoArgsConstructor
 public final class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "ROLE_SEQUENCE", sequenceName = "my_role_role_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ROLE_SEQUENCE")
+    @Column(name="role_id")
     private Long roleId;
-    private RoleName roleName;
 
-    @OneToMany(targetEntity=User.class, mappedBy="userRole", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<User> users;
+    @NotNull
+    private String name;
 
-
-    public enum RoleName {
-        MANAGER(0), CLIENT (1), COLLECTOR (2);
-
-        private final int value;
-        RoleName(int value) {
-            this.value = value;
-        }
-        public int getValue() {
-            return value;
-        }
+    public Role(String name) {
+        this.name = name;
     }
-
 
 }

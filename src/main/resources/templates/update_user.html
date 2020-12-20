@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>User list</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <hr>
+    <h2>Update user</h2><br>
+
+    <form th:action="@{/editUser}" th:object="${editUserDto}"
+          method="post">
+        <input type="hidden" th:field="*{myUser}"/>
+        <label>
+            <input type="checkbox" th:checked="*{roleUser}" value="USER" th:field="*{roleUser}"> USER
+        </label><br><br>
+
+        <label>
+            <input type="checkbox" th:checked="*{roleCollector}" value="COLLECTOR" th:field="*{roleCollector}"> COLLECTOR
+        </label><br><br>
+
+        <label>
+            <input type="checkbox" th:checked="*{roleAdmin}" value="ADMIN" th:field="*{roleAdmin}"> ADMIN
+        </label><br><br>
+
+        <button type="submit" class="btn btn-info col-2">Update User</button>
+    </form>
+
+    <hr>
+
+    <a th:href = "@{/page/1}"> Back to User List</a>
+</div>
+</body>
+</html>

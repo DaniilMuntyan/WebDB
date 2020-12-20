@@ -12,23 +12,21 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public final class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "ORDER_SEQUENCE", sequenceName = "my_order_order_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ORDER_SEQUENCE")
+    @Column(name="order_id")
     private Long orderId;
-
-    @NotNull(message = "Укажите цвет")
     private String color;
-    @NotNull(message = "Укажите размер в формате AxBxC")
-    // REGEX
     private String dimensions;
-    @NotNull(message = "Укажите фокусное расстояние")
     private Integer focalLength;
-    @NotNull(message = "Укажите разрешение")
     private Integer resolution;
-    @NotNull(message = "Укажите количество камер")
     private Integer amount;
 
+    @Column(name="status")
+    private OrderStatus orderStatus;
+
     @ManyToOne
-    @JoinColumn(name="userId", referencedColumnName = "userId")
+    @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
 
 }

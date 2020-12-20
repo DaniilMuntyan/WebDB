@@ -1,7 +1,7 @@
 package com.example.demo.repositories;
 
 import com.example.demo.domain.Camera;
-import org.springframework.core.annotation.Order;
+import com.example.demo.domain.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
