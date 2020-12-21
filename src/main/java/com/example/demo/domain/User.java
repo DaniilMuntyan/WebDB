@@ -1,7 +1,9 @@
 package com.example.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.persistence.*;
@@ -43,7 +45,8 @@ public final class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(targetEntity = Order.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Order.class, mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Order> orderList = new ArrayList<>();
 
     @OneToMany(targetEntity = Notification.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,7 +67,4 @@ public final class User {
         }
         return false;
     }
-
-
-
 }

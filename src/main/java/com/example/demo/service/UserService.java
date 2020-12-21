@@ -5,10 +5,13 @@ import com.example.demo.domain.User;
 import com.example.demo.dto.EditUserDto;
 import com.example.demo.repositories.RoleRepository;
 import com.example.demo.repositories.UserRepository;
+import com.example.demo.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +79,14 @@ public class UserService {
         userRole.ifPresent(role -> user.setRoles(Collections.singleton(role)));
         this.save(user);
         return "redirect:/login";
+    }
+
+    public Optional<User> getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return Optional.of(((CustomUserDetails) principal).getUser());
+        }
+        return Optional.of(null);
     }
 
     public String encodePassword(String password) {

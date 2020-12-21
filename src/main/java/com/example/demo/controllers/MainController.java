@@ -1,7 +1,10 @@
 package com.example.demo.controllers;
 
+import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.EditUserDto;
+import com.example.demo.dto.NewOrderDto;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -51,9 +54,19 @@ public class MainController {
 
     @GetMapping("/admin/users")
     public String list_users(Model model) {
-        /*model.addAttribute("listUsers", this.userService.findAll());
-        return "list_users";*/
-        return findPaginated(1, model);
+        return findPaginatedAdminUsers(1, model);
+    }
+
+    @GetMapping("/admin/users/page/{pageNo}")
+    public String findPaginatedAdminUsers(@PathVariable (value = "pageNo") int pageNo, Model model) {
+        int pageSize = 8;
+        Page<User> page = userService.findPaginated(pageNo, pageSize);
+        List<User> listUsers = page.getContent();
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listUsers", listUsers);
+        return "admin_user_list";
     }
 
     @GetMapping("/login")
@@ -68,35 +81,21 @@ public class MainController {
     }
 
     @GetMapping("/saveUser")
-    public String deleteUser(@ModelAttribute("user") User user) {
+    public String saveUser(@ModelAttribute("user") User user) {
         this.userService.save(user);
         return "redirect:/page/1";
-    }
-
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable (value = "pageNo") int pageNo, Model model) {
-        int pageSize = 5;
-        Page<User> page = userService.findPaginated(pageNo, pageSize);
-        List<User> listUsers = page.getContent();
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listUsers", listUsers);
-        return "user_list";
     }
 
     @GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable (value="id") Long id, Model model) {
         Optional<User> user = userService.findUserById(id);
-        System.out.println(userService.userToDto(user.get()));
         model.addAttribute("editUserDto", userService.userToDto(user.get()));
         return "update_user";
     }
 
     @PostMapping("/editUser")
     public String deleteUser(@ModelAttribute("editRoleDto") EditUserDto editUserDto) {
-        System.out.println(editUserDto);
         this.userService.updateUser(editUserDto);
-        return "redirect:/page/1";
+        return "redirect:/admin/users/page/1";
     }
 }
