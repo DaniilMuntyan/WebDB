@@ -19,9 +19,11 @@
             <a class="navbar-brand" sec:authorize="hasAuthority('ADMIN')" href="/admin/users">All users</a>
             <a class="navbar-brand" sec:authorize="hasAuthority('ADMIN')" href="/admin/orders">Orders</a>
             <a class="navbar-brand" sec:authorize="hasAuthority('ADMIN')" href="/admin/notifications">Notifications</a>
-            <a class="navbar-brand" sec:authorize="hasAuthority('COLLECTOR')" href="/collector/tasks">Tasks</a>
-            <a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/orders">My orders</a>
-            <a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/profile">Edit profile</a>
+            <a class="navbar-brand" sec:authorize="hasAuthority('COLLECTOR')" href="/collector/tasks">Open orders</a>
+            <a class="navbar-brand" sec:authorize="hasAuthority('COLLECTOR')" href="/collector/myTasks">My tasks</a>
+            <a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/orders">Orders</a>
+            <a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/notifications">Notifications</a>
+            <!--<a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/profile">Edit profile</a>-->
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">

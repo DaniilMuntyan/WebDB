@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.controllers.EndPoints;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,9 +40,9 @@ public class MySimplerUrlAuthenticationSuccessHandler implements AuthenticationS
 
     protected String determineTargetUrl(final Authentication authentication) {
         Map<String, String> roleTargetUrlMap = new HashMap<>();
-        roleTargetUrlMap.put("USER", "/user/orders");
-        roleTargetUrlMap.put("ADMIN", "/admin/users");
-        roleTargetUrlMap.put("COLLECTOR", "/collector/tasks");
+        roleTargetUrlMap.put("USER", EndPoints.USER_ORDERS);
+        roleTargetUrlMap.put("ADMIN", EndPoints.ADMIN_USERS);
+        roleTargetUrlMap.put("COLLECTOR", EndPoints.COLLECTOR_TASKS);
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for(final GrantedAuthority grantedAuthority: authorities) {
             String authorityName = grantedAuthority.getAuthority();

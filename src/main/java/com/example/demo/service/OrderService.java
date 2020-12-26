@@ -1,34 +1,39 @@
 package com.example.demo.service;
 
 import com.example.demo.controllers.EndPoints;
+import com.example.demo.domain.Notification;
 import com.example.demo.domain.Order;
+import com.example.demo.domain.OrderStatus;
 import com.example.demo.domain.User;
-import java.awt.Color;
 import com.example.demo.dto.NewOrderDto;
+import com.example.demo.repositories.NotificationRepository;
 import com.example.demo.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class OrderService {
 
+    private final int pageSize = 8;
     private final OrderRepository orderRepository;
     private final UserService userService;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserService userService) {
+    public OrderService(OrderRepository orderRepository, UserService userService, NotificationRepository notificationRepository) {
         this.orderRepository = orderRepository;
         this.userService = userService;
+        this.notificationRepository = notificationRepository;
     }
 
     public Order save(Order order) {
@@ -39,18 +44,51 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    public Optional<Order> findOrderById(Long id) {
-        return orderRepository.findById(id);
+    public String deleteOrder(Long id, int pageNo, RedirectAttributes redirectAttributes) {
+        Order order = findOrderById(id).get();
+        if (order.getOrderStatus() != OrderStatus.CONSIDERING &&
+                order.getOrderStatus() != OrderStatus.ACCEPTED) {
+            redirectAttributes.addFlashAttribute("error", "Order №" + id + " has already been accepted");
+        } else {
+            this.deleteOrderById(id);
+            redirectAttributes.addFlashAttribute("message", "Order №" + id + " has been deleted successfully");
+        }
+        return "redirect:" + EndPoints.USER_ORDERS + "/page/" + pageNo;
     }
 
-    public List<Order> findOrdersByUser(Long id) {
-        Optional<User> user = userService.findUserById(id);
-        return user.map(User::getOrderList).orElse(null);
+    public Optional<Order> findOrderById(Long id) {
+        return orderRepository.findById(id);
     }
 
     public Page<Order> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.orderRepository.findAll(pageable);
+    }
+
+    public Page<Order> findPaginatedUsersById(int pageNo, int pageSize, Long userId) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.orderRepository.findAllByUserId(userId, pageable);
+    }
+
+    public String findPaginatedUserOrders(int pageNo, Model model) {
+        User currentUser = this.userService.getCurrentUser().get();
+        Page<Order> page = this.findPaginatedUsersById(pageNo, this.pageSize, currentUser.getUserId());
+        List<Order> listOrders = page.getContent();
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listOrders", listOrders);
+        return "user_order_list";
+    }
+
+    public String findPaginatedAdminOrders(int pageNo, Model model) {
+        Page<Order> page = this.findPaginated(pageNo, this.pageSize);
+        List<Order> listOrders = page.getContent();
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listOrders", listOrders);
+        return "admin_orders";
     }
 
     public NewOrderDto getEmptyOrderDto() {
@@ -96,4 +134,52 @@ public class OrderService {
         return "redirect:" + EndPoints.USER_ORDERS;
     }
 
+    public String acceptOrder(Long orderId, int pageNo, RedirectAttributes redirectAttributes) {
+        Optional<Order> order = this.findOrderById(orderId);
+        if (order.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " does not exist");
+        } else {
+            if (order.get().getOrderStatus() == OrderStatus.ACCEPTED) {
+                redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " is in process");
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Order №" + orderId + " was accepted");
+                order.get().setOrderStatus(OrderStatus.ACCEPTED);
+                this.save(order.get());
+            }
+        }
+        return "redirect:" + EndPoints.ADMIN_ORDERS + "/page/" + pageNo;
+    }
+
+    public String rejectOrder(Long orderId, int pageNo, RedirectAttributes redirectAttributes) {
+        Optional<Order> order = this.findOrderById(orderId);
+        if (order.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " does not exist");
+        } else {
+            if (order.get().getOrderStatus() == OrderStatus.REJECTED) {
+                redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " is rejected");
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Order №" + orderId + " was rejected");
+                order.get().setOrderStatus(OrderStatus.REJECTED);
+                this.save(order.get());
+            }
+        }
+        return "redirect:" + EndPoints.ADMIN_ORDERS + "/page/" + pageNo;
+    }
+
+    public String releaseOrder(Long orderId, int pageNo, RedirectAttributes redirectAttributes) {
+        Optional<Order> order = this.orderRepository.findById(orderId);
+        if (order.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " does not exist");
+        } else {
+            Notification notification = new Notification(order.get().getUser(), order.get(), "OK");
+            order.get().setOrderStatus(OrderStatus.RELEASE);
+
+            this.notificationRepository.save(notification);
+            this.orderRepository.save(order.get());
+
+            redirectAttributes.addFlashAttribute("message", "Success! Order №" + orderId + " has been released" +
+                    " (see notifications)");
+        }
+        return "redirect:" + EndPoints.ADMIN_ORDERS + "/page/" + pageNo;
+    }
 }

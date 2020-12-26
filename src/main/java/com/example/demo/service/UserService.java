@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.Order;
 import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
 import com.example.demo.dto.EditUserDto;
@@ -8,6 +9,7 @@ import com.example.demo.repositories.UserRepository;
 import com.example.demo.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -101,6 +104,12 @@ public class UserService {
     public Page<User> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.userRepository.findAll(pageable);
+    }
+
+
+    public List<Order> findOrdersByUser(Long id) {
+        Optional<User> user = this.findUserById(id);
+        return user.map(User::getOrderList).orElse(null);
     }
 
     public EditUserDto userToDto(User user) {

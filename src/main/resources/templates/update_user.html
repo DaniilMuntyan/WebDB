@@ -12,7 +12,7 @@
     <hr>
     <h2>Update user</h2><br>
 
-    <form th:action="@{/editUser}" th:object="${editUserDto}"
+    <form th:action="@{/admin/editUser}" th:object="${editUserDto}"
           method="post">
         <input type="hidden" th:field="*{myUser}"/>
         <label>

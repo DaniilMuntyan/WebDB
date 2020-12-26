@@ -66,6 +66,30 @@ public class DemoApplication {
                     admin.setEmail("dfjkl@fjdkl.djfkl");
                     System.out.println(userService.save(admin));
                 }
+
+                if(userService.findByUsername("qqqq").isEmpty()) {
+                    User client = new User();
+                    client.setUsername("qqqq");
+                    client.setPassword(userService.encodePassword("qqqq"));
+                    client.setRoles(Collections.singleton(roleUser));
+                    client.setFirstName("Danyil");
+                    client.setLastName("Muntian");
+                    client.setPhone("0508974518");
+                    client.setEmail("qwerty@mail.com");
+                    System.out.println(userService.save(client));
+                }
+
+                if(userService.findByUsername("wwww").isEmpty()) {
+                    User collector = new User();
+                    collector.setUsername("wwww");
+                    collector.setPassword(userService.encodePassword("wwww"));
+                    collector.setRoles(Collections.singleton(roleCollector));
+                    collector.setFirstName("Ivan");
+                    collector.setLastName("Ivaniv");
+                    collector.setPhone("+380973695824");
+                    collector.setEmail("ivanov@gmail.com");
+                    System.out.println(userService.save(collector));
+                }
             }
         };
     }

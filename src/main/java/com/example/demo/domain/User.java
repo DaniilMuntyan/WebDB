@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Entity
 @Table(name="my_user")
@@ -40,6 +40,10 @@ public final class User {
 
     private String phone;
 
+    @Column(name="date_created")
+    @CreationTimestamp
+    private Date dateCreated;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -55,7 +59,10 @@ public final class User {
     public String displayRoles() {
         StringBuilder s = new StringBuilder();
         for (Role role: roles) {
-            s.append(role.getName()).append("\n");
+            String r = role.getName();
+            if (r.equals("COLLECTOR"))
+                r = "WORKER";
+            s.append(r).append("\n");
         }
         return s.toString();
     }
@@ -66,5 +73,10 @@ public final class User {
                 return true;
         }
         return false;
+    }
+
+    public String formattedDate() {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy " + "\n" + "kk:mm");
+        return formatter.format(this.dateCreated);
     }
 }

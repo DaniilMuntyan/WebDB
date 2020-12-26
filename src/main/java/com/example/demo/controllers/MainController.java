@@ -52,50 +52,8 @@ public class MainController {
         return this.userService.register(user, bindingResult, redirectAttributes);
     }
 
-    @GetMapping("/admin/users")
-    public String list_users(Model model) {
-        return findPaginatedAdminUsers(1, model);
-    }
-
-    @GetMapping("/admin/users/page/{pageNo}")
-    public String findPaginatedAdminUsers(@PathVariable (value = "pageNo") int pageNo, Model model) {
-        int pageSize = 8;
-        Page<User> page = userService.findPaginated(pageNo, pageSize);
-        List<User> listUsers = page.getContent();
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listUsers", listUsers);
-        return "admin_user_list";
-    }
-
     @GetMapping("/login")
     public String login(Model model) {
         return "login";
-    }
-
-    @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable (value = "id") long id) {
-        this.userService.deleteUserById(id);
-        return "redirect:/";
-    }
-
-    @GetMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
-        this.userService.save(user);
-        return "redirect:/page/1";
-    }
-
-    @GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable (value="id") Long id, Model model) {
-        Optional<User> user = userService.findUserById(id);
-        model.addAttribute("editUserDto", userService.userToDto(user.get()));
-        return "update_user";
-    }
-
-    @PostMapping("/editUser")
-    public String deleteUser(@ModelAttribute("editRoleDto") EditUserDto editUserDto) {
-        this.userService.updateUser(editUserDto);
-        return "redirect:/admin/users/page/1";
     }
 }

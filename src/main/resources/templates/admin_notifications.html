@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>User list</title>
+    <title>Notification list</title>
 
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -17,34 +17,28 @@
 <header th:replace="~{fragments/header :: header}"></header>
 
 <div class="container my-2">
-    <h1>All users</h1>
+    <h1>Notifications</h1>
+    <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+    <div class="alert alert-warning text-center" th:if="${error}" th:text="${error}"></div>
     <table border="1" class = "table table-striped table-responsive-md">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Username</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>E-mail</th>
-            <th>Phone</th>
-            <th>Created at</th>
-            <th>Roles</th>
-            <th>Edit</th>
+            <th>Order ID</th>
+            <th>Client ID</th>
+            <th>Message</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${listUsers}">
-            <td th:text="${user.userId}">ID</td>
-            <td th:text="${user.username}">Username</td>
-            <td th:text="${user.firstName}">First Name</td>
-            <td th:text="${user.lastName}">Last Name</td>
-            <td th:text="${user.email}">E-mail</td>
-            <td th:text="${user.phone}">Phone</td>
-            <td th:text="${user.formattedDate()}">Created at</td>
-            <td th:text="${user.displayRoles()}">Roles</td>
+        <tr th:each="notification : ${listNotifications}">
+            <td th:text="${notification.notificationId}">ID</td>
+            <td th:text="${notification.order.orderId}">Order ID</td>
+            <td th:text="${notification.user.userId}">Client ID</td>
+            <td th:text="${notification.message}">Message</td>
             <td>
-                <a th:href="@{/admin/showFormForUpdate/{id}(id=${user.userId})}" class="btn btn-primary">Edit role</a>
-                <a th:href="@{/admin/deleteUser/{id}(id=${user.userId})}" class="btn btn-danger">Delete</a>
+                <a th:href="@{/admin/notifications/page/{pageNo}/delete/{id}(id=${notification.notificationId},
+                            pageNo=${currentPage})}" class="btn btn-block btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>
@@ -57,19 +51,19 @@
             </div>
             <div class = "col-sm-1">
 					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                        <a th:if="${currentPage != i}" th:href="@{'/admin/users/page/' + ${i}}">[[${i}]]</a>
+                        <a th:if="${currentPage != i}" th:href="@{'/admin/notifications/page/' + ${i}}">[[${i}]]</a>
                         <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
 					</span>
             </div>
             <div class = "col-sm-1">
                 <!--<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>-->
-                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/users/page/' + ${currentPage + 1}}">Next</a>
+                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/notifications/page/' + ${currentPage + 1}}">Next</a>
                 <span th:unless="${currentPage < totalPages}">Next</span>
             </div>
 
             <div class="col-sm-1">
                 <!--<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>-->
-                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/users/page/' + ${totalPages}}">Last</a>
+                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/notifications/page/' + ${totalPages}}">Last</a>
                 <span th:unless="${currentPage < totalPages}">Last</span>
             </div>
         </div>

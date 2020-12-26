@@ -13,10 +13,9 @@
     <hr>
     <h2>New order</h2>
 
-    <form action="#" th:action="@{/process_new_order}" th:object="${newOrderDto}"
+    <form action="#" th:action="@{/user/process_new_order}" th:object="${newOrderDto}"
           method="POST">
         <input type="hidden" th:field="*{orderStatus}">
-
         <div class="form-group input-group">
             <select id="colors" type="text" th:field="*{color}" required th:errorClass="is-invalid"
                     class="form-control mb-4 col-4">
@@ -52,11 +51,11 @@
 
         <div class="form-group input-group">
             <input type="number" th:field="*{amount}" required min="5" max="20" th:errorClass="is-invalid"
-                   placeholder="Resolution (mp)" class="form-control mb-4 col-4">
+                   placeholder="Amount" class="form-control mb-4 col-4">
             <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="invalid-feedback"></div>
         </div>
 
-        <button type="submit" class="btn btn-info col-2"> Save Employee</button>
+        <button type="submit" class="btn btn-info col-2"> Add order</button>
     </form>
 
     <hr>

@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name="my_order")
@@ -31,9 +33,17 @@ public final class Order {
     @Column(name="status")
     private OrderStatus orderStatus;
 
+    @Column(name="date_created")
+    @CreationTimestamp
+    private Date date_created;
+
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name="collector_id", referencedColumnName = "user_id")
+    private User collector;
 
     public Order(NewOrderDto newOrderDto) {
         this.user = newOrderDto.getUser();
@@ -43,5 +53,9 @@ public final class Order {
         this.orderStatus = newOrderDto.getOrderStatus();
         this.resolution = newOrderDto.getResolution();
         this.amount = newOrderDto.getAmount();
+    }
+    
+    public String getStatus() {
+        return this.orderStatus.name();
     }
 }
