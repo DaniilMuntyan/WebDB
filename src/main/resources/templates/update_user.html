@@ -11,9 +11,8 @@
 <div class="container">
     <hr>
     <h2>Update user</h2><br>
-
-    <form th:action="@{/admin/editUser}" th:object="${editUserDto}"
-          method="post">
+    <div class="alert alert-danger text-center" th:if="${error}" th:text="${error}"></div>
+    <form th:action="@{/admin/editUser}" th:object="${editUserDto}" method="get">
         <input type="hidden" th:field="*{myUser}"/>
         <label>
             <input type="checkbox" th:checked="*{roleUser}" value="USER" th:field="*{roleUser}"> USER

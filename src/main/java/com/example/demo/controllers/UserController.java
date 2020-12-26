@@ -3,8 +3,8 @@ package com.example.demo.controllers;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.OrderStatus;
 import com.example.demo.domain.User;
-import com.example.demo.dto.EditUserDto;
 import com.example.demo.dto.NewOrderDto;
+import com.example.demo.service.NotificationService;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +18,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class UserController {
 
     private final OrderService orderService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public UserController(OrderService orderService, UserService userService) {
+    public UserController(OrderService orderService, UserService userService, NotificationService notificationService) {
         this.orderService = orderService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping(EndPoints.USER_ORDERS)
@@ -70,5 +71,15 @@ public class UserController {
     public String deleteOrder(@PathVariable("id") Long id, @PathVariable("pageNo") int pageNo, RedirectAttributes redirectAttributes) {
         System.out.println("DELETE ORDER");
         return this.orderService.deleteOrder(id, pageNo, redirectAttributes);
+    }
+
+    @GetMapping(EndPoints.USER_NOTIFICATIONS)
+    public String user_notifications(Model model) {
+        return findPaginatedUserNotifications(1, model);
+    }
+
+    @GetMapping(EndPoints.USER_NOTIFICATIONS_PAGE)
+    public String findPaginatedUserNotifications(@PathVariable(value = "pageNo") int pageNo, Model model) {
+        return this.notificationService.findPaginatedUserNotifications(pageNo, model);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.controllers.EndPoints;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
@@ -97,19 +98,14 @@ public class UserService {
         return encoder.encode(password);
     }
 
-    public void deleteUserById(Long id) {
+    public String deleteUserById(Long id) {
         this.userRepository.deleteById(id);
+        return "redirect:/";
     }
 
     public Page<User> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.userRepository.findAll(pageable);
-    }
-
-
-    public List<Order> findOrdersByUser(Long id) {
-        Optional<User> user = this.findUserById(id);
-        return user.map(User::getOrderList).orElse(null);
     }
 
     public EditUserDto userToDto(User user) {
@@ -133,7 +129,7 @@ public class UserService {
         return editUserDto;
     }
 
-    public void updateUser(EditUserDto editUserDto) {
+    public String updateUser(EditUserDto editUserDto, RedirectAttributes redirectAttributes) {
         User user = editUserDto.getMyUser();
         Set<Role> roles = new HashSet<>();
         if (editUserDto.isRoleUser()) {
@@ -148,7 +144,12 @@ public class UserService {
             Role role = roleRepository.findByName("ADMIN").get();
             roles.add(role);
         }
+        if (roles.size() == 0) {
+            redirectAttributes.addFlashAttribute("error", "User must have at least one role!");
+            return "redirect:" + EndPoints.ADMIN_UPDATE_USER.replace("{id}", user.getUserId().toString());
+        }
         user.setRoles(roles);
         userRepository.save(user);
+        return "redirect:/admin/users/page/1";
     }
 }

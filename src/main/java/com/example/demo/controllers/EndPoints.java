@@ -3,6 +3,9 @@ package com.example.demo.controllers;
 public class EndPoints {
     public static final String ADMIN_USERS = "/admin/users";
     public static final String ADMIN_USERS_PAGE = "/admin/users/page/{pageNo}";
+    public static final String ADMIN_UPDATE_USER = "/admin/showFormForUpdate/{id}";
+    public static final String ADMIN_EDIT_USER = "/admin/editUser";
+    public static final String ADMIN_DELETE_USER = "/admin/deleteUser/{id}";
     public static final String ADMIN_ORDERS = "/admin/orders";
     public static final String ADMIN_ORDERS_PAGE = "/admin/orders/page/{pageNo}";
     public static final String ADMIN_ACCEPT_ORDER = "/admin/orders/page/{pageNo}/acceptOrder/{id}";
@@ -18,6 +21,8 @@ public class EndPoints {
     public static final String NEW_ORDER_FORM = "/user/showNewOrderForm";
     public static final String SAVE_ORDER = "/user/saveOrder";
     public static final String DELETE_ORDER = "/user/orders/page/{pageNo}/deleteOrder/{id}";
+    public static final String USER_NOTIFICATIONS = "/user/notifications";
+    public static final String USER_NOTIFICATIONS_PAGE = "/user/notifications/page/{pageNo}";
 
     public static final String COLLECTOR_TASKS = "/collector/tasks";
     public static final String COLLECTOR_MY_TASKS = "/collector/myTasks";

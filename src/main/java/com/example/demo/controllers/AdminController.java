@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.domain.User;
 import com.example.demo.dto.EditUserDto;
+import com.example.demo.service.AdminService;
 import com.example.demo.service.NotificationService;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
@@ -24,12 +25,14 @@ public class AdminController {
     private final UserService userService;
     private final OrderService orderService;
     private final NotificationService notificationService;
+    private final AdminService adminService;
 
     @Autowired
-    public AdminController(UserService userService, OrderService orderService, NotificationService notificationService) {
+    public AdminController(UserService userService, OrderService orderService, NotificationService notificationService, AdminService adminService) {
         this.userService = userService;
         this.orderService = orderService;
         this.notificationService = notificationService;
+        this.adminService = adminService;
     }
 
     @GetMapping(EndPoints.ADMIN_ORDERS)
@@ -39,7 +42,7 @@ public class AdminController {
 
     @GetMapping(EndPoints.ADMIN_ORDERS_PAGE)
     public String findPaginatedAdminOrders(@PathVariable (value = "pageNo") int pageNo, Model model) {
-        return this.orderService.findPaginatedAdminOrders(pageNo, model);
+        return this.adminService.findPaginatedAdminOrders(pageNo, model);
     }
 
     @GetMapping(EndPoints.ADMIN_USERS)
@@ -49,33 +52,22 @@ public class AdminController {
 
     @GetMapping(EndPoints.ADMIN_USERS_PAGE)
     public String findPaginatedAdminUsers(@PathVariable (value = "pageNo") int pageNo, Model model) {
-        int pageSize = 8;
-        Page<User> page = userService.findPaginated(pageNo, pageSize);
-        List<User> listUsers = page.getContent();
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listUsers", listUsers);
-        return "admin_user_list";
+        return this.adminService.findPaginatedAdminUsers(pageNo, model);
     }
 
-    @GetMapping("/admin/showFormForUpdate/{id}")
+    @GetMapping(EndPoints.ADMIN_UPDATE_USER)
     public String showFormForUpdate(@PathVariable (value="id") Long id, Model model) {
-        Optional<User> user = userService.findUserById(id);
-        model.addAttribute("editUserDto", userService.userToDto(user.get()));
-        return "update_user";
+        return this.adminService.showFormForUpdate(id, model);
     }
 
-    @PostMapping("/admin/editUser")
-    public String deleteUser(@ModelAttribute("editRoleDto") EditUserDto editUserDto) {
-        this.userService.updateUser(editUserDto);
-        return "redirect:/admin/users/page/1";
+    @GetMapping(EndPoints.ADMIN_EDIT_USER)
+    public String editUser(@ModelAttribute("editRoleDto") EditUserDto editUserDto, RedirectAttributes redirectAttributes) {
+        return this.userService.updateUser(editUserDto, redirectAttributes);
     }
 
-    @GetMapping("/admin/deleteUser/{id}")
+    @GetMapping(EndPoints.ADMIN_DELETE_USER)
     public String deleteUser(@PathVariable (value = "id") long id) {
-        this.userService.deleteUserById(id);
-        return "redirect:/";
+        return this.userService.deleteUserById(id);
     }
 
     @GetMapping(EndPoints.ADMIN_ACCEPT_ORDER)

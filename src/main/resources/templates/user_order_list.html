@@ -42,7 +42,10 @@
             <td th:text="${order.amount}">Amount</td>
             <td th:text="${order.orderStatus}">Status</td>
             <td>
-                <a th:href="@{/user/orders/{pageNo}/deleteOrder/{id}(id=${order.orderId}, pageNo=${currentPage})}" class="btn btn-danger">Delete</a>
+                <a th:if="${order.getStatus() == 'CREATING' or order.getStatus() == 'CONSIDERING' or order.getStatus() == 'ACCEPTED'}"
+                   th:href="@{/user/orders/{pageNo}/deleteOrder/{id}(id=${order.orderId}, pageNo=${currentPage})}" class="btn btn-danger">Delete</a>
+                <a th:unless="${order.getStatus() == 'CREATING' or order.getStatus() == 'CONSIDERING' or order.getStatus() == 'ACCEPTED'}"
+                   class="btn disabled btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>

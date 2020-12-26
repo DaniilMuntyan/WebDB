@@ -60,10 +60,10 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Page<Order> findPaginated(int pageNo, int pageSize) {
+    /*public Page<Order> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.orderRepository.findAll(pageable);
-    }
+    }*/
 
     public Page<Order> findPaginatedUsersById(int pageNo, int pageSize, Long userId) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
@@ -81,7 +81,7 @@ public class OrderService {
         return "user_order_list";
     }
 
-    public String findPaginatedAdminOrders(int pageNo, Model model) {
+    /*public String findPaginatedAdminOrders(int pageNo, Model model) {
         Page<Order> page = this.findPaginated(pageNo, this.pageSize);
         List<Order> listOrders = page.getContent();
         model.addAttribute("currentPage", pageNo);
@@ -89,7 +89,7 @@ public class OrderService {
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("listOrders", listOrders);
         return "admin_orders";
-    }
+    }*/
 
     public NewOrderDto getEmptyOrderDto() {
         return new NewOrderDto(userService.getCurrentUser().get());
@@ -171,7 +171,7 @@ public class OrderService {
         if (order.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " does not exist");
         } else {
-            Notification notification = new Notification(order.get().getUser(), order.get(), "OK");
+            Notification notification = new Notification(order.get().getUser(), order.get(), "DONE");
             order.get().setOrderStatus(OrderStatus.RELEASE);
 
             this.notificationRepository.save(notification);
