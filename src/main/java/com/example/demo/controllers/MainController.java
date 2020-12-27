@@ -1,14 +1,9 @@
 package com.example.demo.controllers;
 
-import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
-import com.example.demo.dto.EditUserDto;
-import com.example.demo.dto.NewOrderDto;
-import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
