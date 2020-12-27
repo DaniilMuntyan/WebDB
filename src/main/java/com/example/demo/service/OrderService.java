@@ -6,6 +6,7 @@ import com.example.demo.domain.Order;
 import com.example.demo.domain.OrderStatus;
 import com.example.demo.domain.User;
 import com.example.demo.dto.NewOrderDto;
+import com.example.demo.dto.ReleaseDto;
 import com.example.demo.repositories.NotificationRepository;
 import com.example.demo.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,16 +81,6 @@ public class OrderService {
         model.addAttribute("listOrders", listOrders);
         return "user_order_list";
     }
-
-    /*public String findPaginatedAdminOrders(int pageNo, Model model) {
-        Page<Order> page = this.findPaginated(pageNo, this.pageSize);
-        List<Order> listOrders = page.getContent();
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listOrders", listOrders);
-        return "admin_orders";
-    }*/
 
     public NewOrderDto getEmptyOrderDto() {
         return new NewOrderDto(userService.getCurrentUser().get());
@@ -166,12 +157,13 @@ public class OrderService {
         return "redirect:" + EndPoints.ADMIN_ORDERS + "/page/" + pageNo;
     }
 
-    public String releaseOrder(Long orderId, int pageNo, RedirectAttributes redirectAttributes) {
+    public String releaseOrder(Long orderId, int pageNo, ReleaseDto releaseDto, RedirectAttributes redirectAttributes) {
         Optional<Order> order = this.orderRepository.findById(orderId);
         if (order.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Order №" + orderId + " does not exist");
         } else {
-            Notification notification = new Notification(order.get().getUser(), order.get(), "DONE");
+            Notification notification = new Notification(order.get().getUser(), order.get(), releaseDto.getName(),
+                    releaseDto.getEmail(), releaseDto.getMessage());
             order.get().setOrderStatus(OrderStatus.RELEASE);
 
             this.notificationRepository.save(notification);

@@ -58,7 +58,7 @@
                     class="btn disabled btn-danger">Reject</a>
 
                 <a th:if="${order.getStatus() == 'DONE'}"
-                   th:href="@{/admin/orders/page/{pageNo}/releaseOrder/{id}(id=${order.orderId} , pageNo=${currentPage})}"
+                   th:href="@{/admin/orders/page/{pageNo}/releaseForm/{id}(id=${order.orderId} , pageNo=${currentPage})}"
                    class="btn btn-success">Release</a>
                 <a th:unless="${order.getStatus() == 'DONE'}"
                    class="btn disabled btn-success">Release</a>

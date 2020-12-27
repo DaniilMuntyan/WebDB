@@ -43,9 +43,9 @@
             <td th:text="${order.orderStatus}">Status</td>
             <td>
                 <a th:if="${order.getStatus() == 'CREATING' or order.getStatus() == 'CONSIDERING' or order.getStatus() == 'ACCEPTED'}"
-                   th:href="@{/user/orders/{pageNo}/deleteOrder/{id}(id=${order.orderId}, pageNo=${currentPage})}" class="btn btn-danger">Delete</a>
+                   th:href="@{/user/orders/{pageNo}/deleteOrder/{id}(id=${order.orderId}, pageNo=${currentPage})}" class="btn btn-block btn-danger">Delete</a>
                 <a th:unless="${order.getStatus() == 'CREATING' or order.getStatus() == 'CONSIDERING' or order.getStatus() == 'ACCEPTED'}"
-                   class="btn disabled btn-danger">Delete</a>
+                   class="btn btn-block disabled btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>

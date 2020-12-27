@@ -1,0 +1,88 @@
+<!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <title>Edit profile</title>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div class="container my-2">
+    <div class="card bg-light">
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <h4 class="card-title mt-3 text-center">Edit profile</h4>
+            <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+            <div class="alert alert-warning text-center" th:if="${error}" th:text="${error}"></div>
+            <form th:action="@{/user/{id}/editProfile(id=${id})}" method="post" th:object="${user}">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user-circle"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Username" type="text" th:errorClass="is-invalid"
+                           th:field="*{username}" th:value="${user.username}" required minlength="3" maxlength="20"/>
+                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Password" type="password" th:errorClass="is-invalid"
+                           th:field="*{password}" th:value="${user.password}" required minlength="4" maxlength="30"/>
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Confirm password" type="password" th:errorClass="is-invalid"
+                           th:field="*{rpassword}" required/>
+                    <div th:if="${#fields.hasErrors('rpassword')}" th:errors="*{rpassword}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <label></label>
+                    <input name="" class="form-control" placeholder="Firstname" type="text" th:errorClass="is-invalid"
+                           th:field="*{firstName}" required th:value="${user.firstName}" maxlength="50">
+                    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <label></label>
+                    <input name="" class="form-control" placeholder="Lastname" type="text" th:errorClass="is-invalid"
+                           th:field="*{lastName}" required th:value="${user.lastName}" maxlength="50">
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Email" type="email" th:errorClass="is-invalid"
+                           th:field="*{email}" required th:value="${user.email}">
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Phone number" type="text" th:errorClass="is-invalid"
+                           pattern="^\+?(38)?(\d{10,11})$" title="(+38)0123456789"
+                           th:field="*{phone}" required th:value="${user.phone}"/>
+                    <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="invalid-feedback"></div>
+                </div> <!-- form-group// -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Edit</button>
+                </div> <!-- form-group// -->
+            </form>
+        </article>
+    </div> <!-- card.// -->
+</div>
+</body>
+</html>

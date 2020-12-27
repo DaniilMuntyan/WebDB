@@ -25,6 +25,9 @@
             <th>ID</th>
             <th>Order ID</th>
             <th>Client ID</th>
+            <th>Username</th>
+            <th>Manager</th>
+            <th>Contact</th>
             <th>Message</th>
             <th>Actions</th>
         </tr>
@@ -34,6 +37,9 @@
             <td th:text="${notification.notificationId}">ID</td>
             <td th:text="${notification.order.orderId}">Order ID</td>
             <td th:text="${notification.user.userId}">Client ID</td>
+            <td th:text="${notification.user.username}">Username</td>
+            <td th:text="${notification.managerName}">Manager</td>
+            <td th:text="${notification.managerEmail}">Contact</td>
             <td th:text="${notification.message}">Message</td>
             <td>
                 <a th:href="@{/admin/notifications/page/{pageNo}/delete/{id}(id=${notification.notificationId},

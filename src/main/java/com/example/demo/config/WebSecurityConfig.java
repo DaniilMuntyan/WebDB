@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.controllers.EndPoints;
 import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +60,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/process_register").permitAll()
-                .antMatchers("/admin/users").hasAuthority("ADMIN")
+                .antMatchers(EndPoints.LOGIN, EndPoints.REGISTER, EndPoints.PROCESS_REGISTER).permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/user/**").hasAuthority("USER")
+                .antMatchers("/collector/**").hasAuthority("COLLECTOR")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

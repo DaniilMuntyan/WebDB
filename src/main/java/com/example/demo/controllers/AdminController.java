@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.domain.User;
 import com.example.demo.dto.EditUserDto;
+import com.example.demo.dto.ReleaseDto;
 import com.example.demo.service.AdminService;
 import com.example.demo.service.NotificationService;
 import com.example.demo.service.OrderService;
@@ -10,14 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-import java.util.Optional;
+import javax.validation.Valid;
 
 @Controller
 public class AdminController {
@@ -82,10 +79,17 @@ public class AdminController {
         return this.orderService.rejectOrder(orderId, pageNo, redirectAttributes);
     }
 
-    @GetMapping(EndPoints.ADMIN_RELEASE_ORDER)
-    public String releaseOrder(@PathVariable (value = "id") long orderId, @PathVariable (value = "pageNo") int pageNo,
-                              RedirectAttributes redirectAttributes) {
-        return this.orderService.releaseOrder(orderId, pageNo, redirectAttributes);
+    @GetMapping(EndPoints.ADMIN_RELEASE_FORM)
+    public String releaseForm(@PathVariable (value = "id") long orderId, @PathVariable (value = "pageNo") int pageNo,
+                              Model model) {
+        return this.adminService.releaseForm(orderId, pageNo, model);
+    }
+
+    @PostMapping(EndPoints.ADMIN_RELEASE_PROCESS)
+    public String releaseOrder(@Valid ReleaseDto releaseDto, @PathVariable (value = "id") long orderId,
+                               @PathVariable (value = "pageNo") int pageNo,
+                               RedirectAttributes redirectAttributes) {
+        return this.orderService.releaseOrder(orderId, pageNo, releaseDto, redirectAttributes);
     }
 
     @GetMapping(EndPoints.ADMIN_NOTIFICATIONS)

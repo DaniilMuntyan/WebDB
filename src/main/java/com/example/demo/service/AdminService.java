@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
+import com.example.demo.dto.ReleaseDto;
 import com.example.demo.repositories.OrderRepository;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +62,13 @@ public final class AdminService {
         Optional<User> user = userService.findUserById(id);
         model.addAttribute("editUserDto", userService.userToDto(user.get()));
         return "update_user";
+    }
+
+    public String releaseForm(long orderId, int pageNo, Model model) {
+        model.addAttribute("releaseDto", new ReleaseDto());
+        model.addAttribute("pageNo", pageNo);
+        model.addAttribute("id", orderId);
+        return "admin_release";
     }
 
 }

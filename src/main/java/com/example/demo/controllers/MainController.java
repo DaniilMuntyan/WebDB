@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -38,22 +36,33 @@ public class MainController {
 
     @GetMapping("/")
     public String viewHomePage(Model model) {
-        return "index";
+        return "redirect:" + EndPoints.LOGIN;
     }
 
-    @GetMapping("/register")
+    @GetMapping(EndPoints.REGISTER)
     public String register(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
 
-    @PostMapping("/process_register")
+    @PostMapping(EndPoints.PROCESS_REGISTER)
     public String processRegistration(@Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         return this.userService.register(user, bindingResult, redirectAttributes);
     }
 
-    @GetMapping("/login")
+    @GetMapping(EndPoints.LOGIN)
     public String login(Model model) {
         return "login";
+    }
+
+    @GetMapping(EndPoints.USER_FORM_EDIT_PROFILE)
+    public String formEditProfile(Model model) {
+        return this.userService.formEditProfile(model);
+    }
+
+    @PostMapping(EndPoints.USER_EDIT_PROFILE)
+    public String editProfile(@Valid User user, @PathVariable (value = "id") long id, BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+        return this.userService.editProfile(user, id, bindingResult, redirectAttributes);
     }
 }

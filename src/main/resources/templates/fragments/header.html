@@ -23,6 +23,7 @@
             <a class="navbar-brand" sec:authorize="hasAuthority('COLLECTOR')" href="/collector/myTasks">My tasks</a>
             <a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/orders">Orders</a>
             <a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/notifications">Notifications</a>
+            <a class="navbar-brand" href="/user/formEditProfile">Edit profile</a>
             <!--<a class="navbar-brand" sec:authorize="hasAuthority('USER')" href="/user/profile">Edit profile</a>-->
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
@@ -33,6 +34,7 @@
                     <li class="nav-item">
                     </li>
                 </ul>
+                <span sec:authentication="name" style="color:white; margin-right: 1.25em; display: inline-block; font-size: 120%">Username</span>
                 <form action="/logout" method="post" class="form-inline mt-2 mt-md-0">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log out</button>
                 </form>

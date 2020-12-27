@@ -152,4 +152,43 @@ public class UserService {
         userRepository.save(user);
         return "redirect:/admin/users/page/1";
     }
+
+    public String formEditProfile(Model model) {
+        User user = findUserById(getCurrentUser().get().getUserId()).get();
+        model.addAttribute("user", user);
+        model.addAttribute("id", user.getUserId());
+        return "user_edit_profile";
+    }
+
+    public String editProfile(User user, Long id, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        User userDb = findUserById(id).get();
+        Optional<User> userByUsername = findByUsername(user.getUsername());
+        if (userByUsername.isPresent() && !userByUsername.get().getUserId().equals(userDb.getUserId())) {
+            bindingResult.addError(new FieldError("user", "username",
+                    "Username already in use"));
+        }
+
+        if (user.getPassword() != null && user.getRpassword() != null) {
+            if (!user.getPassword().equals(user.getRpassword())) {
+                bindingResult.addError(new FieldError("user", "rpassword", "" +
+                        "Passwords must match"));
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Error! Try again");
+            System.out.println(bindingResult.getAllErrors());
+            return "redirect:" + EndPoints.USER_FORM_EDIT_PROFILE;
+        }
+
+        user.setPassword(encodePassword(user.getPassword()));
+
+        userDb.copyUser(user);
+        this.save(userDb);
+
+        redirectAttributes.addFlashAttribute("message", "Success! Your profile has been changed");
+
+        return "redirect:" + EndPoints.USER_FORM_EDIT_PROFILE;
+    }
+
 }

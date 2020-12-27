@@ -28,9 +28,6 @@ public class DemoApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                /*roleService.save(new Role("ADMIN"));
-                roleService.save(new Role("COLLECTOR"));
-                roleService.save(new Role("USER"));*/
                 Role roleAdmin;
                 Role roleCollector;
                 Role roleUser;

@@ -49,11 +49,12 @@ public final class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(targetEntity = Order.class, mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(targetEntity = Order.class, mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    //@JsonManagedReference
     private List<Order> orderList = new ArrayList<>();
 
-    @OneToMany(targetEntity = Notification.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Notification.class, mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    //@JsonManagedReference
     private List<Notification> notifications = new ArrayList<>();
 
     public String displayRoles() {
@@ -78,5 +79,16 @@ public final class User {
     public String formattedDate() {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy " + "\n" + "kk:mm");
         return formatter.format(this.dateCreated);
+    }
+
+    public void copyUser(User user2) {
+        this.setEmail(user2.getEmail());
+        this.setPhone(user2.getPhone());
+        this.setLastName(user2.getLastName());
+        this.setFirstName(user2.getFirstName());
+        this.setPassword(user2.getPassword());
+        this.setNotifications(user2.getNotifications());
+        this.setUsername(user2.getUsername());
+        this.setOrderList(user2.getOrderList());
     }
 }
