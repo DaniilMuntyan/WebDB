@@ -12,11 +12,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import java.util.Collections;
 
 @SpringBootApplication
+@EnableJpaRepositories("com.example.demo.repositories")
 public class DemoApplication {
 
     public static void main(String[] args) {
