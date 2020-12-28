@@ -64,11 +64,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(EndPoints.LOGIN, EndPoints.REGISTER, EndPoints.PROCESS_REGISTER).permitAll()
+                .antMatchers("/user/formEditProfile").permitAll()
+                .antMatchers("/user/{\\d+}/editProfile").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .antMatchers("/collector/**").hasAuthority("COLLECTOR")
-                .antMatchers("/user/formEditProfile").permitAll()
-                .antMatchers("/user/{\\d+}/editProfile").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
