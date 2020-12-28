@@ -44,16 +44,16 @@ public final class User {
     @CreationTimestamp
     private Date dateCreated;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(targetEntity = Order.class, mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Order.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //@JsonManagedReference
     private List<Order> orderList = new ArrayList<>();
 
-    @OneToMany(targetEntity = Notification.class, mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Notification.class, mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //@JsonManagedReference
     private List<Notification> notifications = new ArrayList<>();
 

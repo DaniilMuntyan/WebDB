@@ -61,11 +61,6 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    /*public Page<Order> findPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return this.orderRepository.findAll(pageable);
-    }*/
-
     public Page<Order> findPaginatedUsersById(int pageNo, int pageSize, Long userId) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.orderRepository.findAllByUserId(userId, pageable);

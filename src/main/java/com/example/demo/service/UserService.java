@@ -100,7 +100,7 @@ public class UserService {
 
     public String deleteUserById(Long id) {
         this.userRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:" + EndPoints.ADMIN_USERS;
     }
 
     public Page<User> findPaginated(int pageNo, int pageSize) {
