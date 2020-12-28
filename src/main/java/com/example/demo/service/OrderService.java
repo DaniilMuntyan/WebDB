@@ -130,6 +130,7 @@ public class OrderService {
             } else {
                 redirectAttributes.addFlashAttribute("message", "Order №" + orderId + " was accepted");
                 order.get().setOrderStatus(OrderStatus.ACCEPTED);
+                
                 this.save(order.get());
             }
         }
