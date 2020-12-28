@@ -21,12 +21,12 @@ public class Notification {
     @Column(name="notification_id")
     private Long notificationId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
     @NonNull
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="order_id", referencedColumnName = "order_id")
     @NonNull
     private Order order;

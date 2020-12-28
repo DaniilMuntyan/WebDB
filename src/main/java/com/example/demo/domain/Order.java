@@ -37,11 +37,11 @@ public final class Order {
     @CreationTimestamp
     private Date date_created;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="collector_id", referencedColumnName = "user_id")
     private User collector;
 

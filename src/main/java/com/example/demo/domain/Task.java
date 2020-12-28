@@ -21,12 +21,12 @@ public class Task {
     @Column(name="task_id")
     private Long taskId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="order_id", referencedColumnName = "order_id")
     @NonNull
     private Order order;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     @JoinColumn(name="collector_id", referencedColumnName = "user_id")
     private User collector;

@@ -26,11 +26,11 @@ public final class Camera {
 
     private Integer resolution;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="order_id", referencedColumnName = "order_id")
     private Order order;
 }

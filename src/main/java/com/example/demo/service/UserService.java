@@ -87,6 +87,7 @@ public class UserService {
 
     public Optional<User> getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(principal);
         if (principal instanceof UserDetails) {
             return Optional.of(((CustomUserDetails) principal).getUser());
         }
